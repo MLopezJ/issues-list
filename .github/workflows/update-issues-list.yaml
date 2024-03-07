@@ -1,0 +1,26 @@
+name: Update Issues List
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 * * * *"
+  push:
+    branches:
+      - saga
+
+jobs:
+  update:
+    runs-on: ubuntu-22.04
+
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v1.x
+
+      - env:
+          GITHUB_TOKEN: ${{ secrets.ISSUES_LIST_TOKEN }}
+        run: deno run -A issues-list.ts
